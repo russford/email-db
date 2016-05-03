@@ -1,8 +1,8 @@
-import os
 import hashlib
 import glob
 import sqlite3
 import ExtractMsg
+import tkFileDialog
 
 def md5_for_file(filename, block_size=2**6):
     md5 = hashlib.md5()
@@ -48,17 +48,14 @@ def generate_db (directory):
             db_data = msg_data (msg_file)
             cur.execute ("INSERT INTO email VALUES (?,?,?,?,?,?,?,?,?)", db_data)
         except:
-            print "error in file %s" % msg_file
-            if err_action <> "c":
-                print "i for ignore, c to ignore all, s to stop:"
-                err_action = raw_input()
-                if err_action == "s":
-                    break
-				
+            print ("error in file %s" % msg_file)
+
         i = i+1
-        if i%10 == 0: print "%s completed"%i
+        if i%10 == 0: print ("%s completed"%i)
     con.commit()       
         
 if __name__ == "__main__":
-    a = generate_db("c:/email/2015-11 to 12")
+    folder = tkFileDialog.askdirectory()
+    if folder:
+        a = generate_db(folder)
     
